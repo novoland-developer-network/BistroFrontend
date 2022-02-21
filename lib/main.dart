@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app.dart';
 import 'life.dart';
-import 'news.dart';
 import 'mine.dart';
+import 'news.dart';
 import 'router/router.dart';
 
 //import 'common/access_control_filter.dart';
@@ -64,16 +64,46 @@ class BistroFrame extends StatefulWidget {
 
 class _BistroFrameState extends State<BistroFrame> {
   late Widget _body;
-  int _index = 1;
+  int _index = 3;
+  static const List<Map<String, dynamic>> _iconList = [
+    {
+      "title": "应用",
+      "default": Icons.storefront_outlined,
+      "active": Icons.storefront_rounded,
+      "display": true,
+    },
+    {
+      "title": "道听",
+      "default": Icons.forum_outlined,
+      "active": Icons.forum_rounded,
+      "display": true,
+    },
+    {
+      "display": false,
+    },
+    {
+      "title": "途说",
+      "default": Icons.supervisor_account_outlined,
+      "active": Icons.supervisor_account_sharp,
+      "display": true,
+    },
+    {
+      "title": "我的",
+      "default": Icons.perm_identity_outlined,
+      "active": Icons.person_sharp,
+      "display": true,
+    },
+  ];
 
   void initData() {
     //页面初始化时要干的事
+
     _body = IndexedStack(
       children: <Widget>[
         const App(),
-        const Life(),
-        const App(),
         News(),
+        News(),
+        const Life(),
         const Mine(),
       ],
       index: _index,
@@ -84,37 +114,19 @@ class _BistroFrameState extends State<BistroFrame> {
   Widget build(BuildContext context) {
     initData();
 
+    List<Widget> bottomNavigationBarData = [];
+    for (var i = 0; i < 5; i++) {
+
+      Widget itemWidget = bottomAppBarItem(index: i);
+      bottomNavigationBarData.add(itemWidget);
+    }
+
     return Scaffold(
       body: _body,
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         child: Row(
-          children: <Widget>[
-            bottomAppBarItem(
-              index: 0,
-              icon: Icons.apps,
-              title: '应用',
-            ),
-            bottomAppBarItem(
-              index: 1,
-              icon: Icons.forum,
-              title: '听说',
-            ),
-            bottomAppBarItem(
-              index: 2,
-              isShow: false,
-            ),
-            bottomAppBarItem(
-              index: 3,
-              icon: Icons.business,
-              title: '资讯',
-            ),
-            bottomAppBarItem(
-              index: 4,
-              icon: Icons.perm_identity,
-              title: '我的',
-            ),
-          ],
+          children: bottomNavigationBarData,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
         ),
       ),
@@ -132,29 +144,36 @@ class _BistroFrameState extends State<BistroFrame> {
 
   Widget bottomAppBarItem({
     required int index, // 序列
-    IconData? icon, // 图标
-    String? title, // 标签
-    bool isShow = true, // 是否需要显示
   }) {
+    Map<String, dynamic> item = _iconList[index];
+
     //设置默认未选中的状态
     double size = 11;
     Color color = Colors.black87;
+    bool isShow = item["display"];
 
     TextStyle style = TextStyle(
       fontSize: size,
     );
 
-    if (_index == index) {
-      //选中的话
-      size = 17;
-      color = Theme.of(context).primaryColor;
-      title = '';
-      style = const TextStyle(
-        fontSize: 0,
-      );
-    }
+
     Widget child;
-    if (isShow) {
+    if (!isShow) {
+      child = Container();
+    } else {
+      IconData icon = item["default"];
+      String title = item["title"];
+
+      if (_index == index) {
+        //选中的话
+        size = 14;
+        color = Theme.of(context).primaryColor;
+        style = const TextStyle(
+          fontSize: 0,
+        );
+        icon = item["active"];
+      }
+
       child = GestureDetector(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -169,7 +188,7 @@ class _BistroFrameState extends State<BistroFrame> {
               ),
             ),
             Text(
-              title!,
+              title,
               style: style,
             )
           ],
@@ -182,8 +201,6 @@ class _BistroFrameState extends State<BistroFrame> {
           }
         },
       );
-    } else {
-      child = Container();
     }
 
     //构造返回的Widget

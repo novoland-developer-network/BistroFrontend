@@ -4,7 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class Life extends StatefulWidget {
   const Life({Key? key}) : super(key: key);
-  final title = '听说';
+  final title = '途说';
 
   @override
   State<Life> createState() => _LifeState();

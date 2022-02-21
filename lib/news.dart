@@ -7,7 +7,7 @@ class News extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutScaffold(
       appBar: AppBar(
-        title: const Text('资讯'),
+        title: const Text('道听'),
       ),
       body: null,
     );

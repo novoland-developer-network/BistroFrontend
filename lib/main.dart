@@ -68,7 +68,7 @@ class _BistroFrameState extends State<BistroFrame> {
 
   static const List<Map<String, dynamic>> _iconList = [
     {
-      "title": "应用",
+      "title": "满席",
       "icon": Icons.storefront_outlined,
       "display": true,
     },
@@ -86,7 +86,7 @@ class _BistroFrameState extends State<BistroFrame> {
       "display": true,
     },
     {
-      "title": "我的",
+      "title": "在下",
       "icon": Icons.person_outline,
       "display": true,
     },

@@ -17,7 +17,7 @@ class _AppState extends State<App> {
     // TODO: implement build
     return LayoutScaffold(
       appBar: AppBar(
-        title: const Text('应用'),
+        title: const Text('满席'),
       ),
       body: null,
     );

@@ -12,7 +12,7 @@ class Mine extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutScaffold(
       appBar: AppBar(
-        title: const Text('我的'),
+        title: const Text('在下'),
       ),
 
     );

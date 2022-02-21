@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class LayoutScaffold extends StatelessWidget {
   final AppBar appBar;
@@ -13,20 +14,27 @@ class LayoutScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Text title = appBar.title as Text;
+    print(appBar.preferredSize);
 
     return Scaffold(
       appBar: PreferredSize(
         child: AppBar(
+          actions: appBar.actions,
+          leading: appBar.leading,
           title: Text(
             title.data ?? '',
             style: const TextStyle(
-              fontSize: 30,
+              fontSize: 25,
             ),
           ),
           centerTitle: true,
           bottom: appBar.bottom,
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,  //设置为透明
+            statusBarIconBrightness: Brightness.dark,
+          ),
         ),
-        preferredSize: appBar.preferredSize,
+        preferredSize: const Size.fromHeight(60),
       ),
       body: body,
     );

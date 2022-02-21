@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 // import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app.dart';
 import 'life.dart';
@@ -19,13 +20,24 @@ class Bistro extends StatelessWidget {
     return MaterialApp(
       title: '小酒馆',
       theme: ThemeData(
-          fontFamily: "SongTiHeavy",
-          primaryColor: const Color(0xFFff857a),
-          primaryColorDark: Colors.black54,
-          backgroundColor: const Color(0xFFFFF7F8),
-          bottomAppBarColor: const Color(0xFFFFF7F8),
-          appBarTheme: const AppBarTheme(color: Colors.white), colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.amber).copyWith(secondary: Colors.deepOrangeAccent)),
-      home: const BistroFrame(title: 'Flutter Demo Home Page', ),
+        fontFamily: "SongTiHeavy",
+        primaryColor: const Color(0xFFff857a),
+        // primaryColor: const Color(0xFF5f2500),
+        primaryColorDark: Colors.white60,
+        backgroundColor: const Color(0xFFFFF7F8),
+        // backgroundColor: const Color(0xFFcf9237),
+        bottomAppBarColor: const Color(0xFFFFF7F8),
+        appBarTheme: const AppBarTheme(color: Colors.white),
+        // appBarTheme: const AppBarTheme(color: Color(0xFF5f2500)),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.amber,
+        ).copyWith(
+          secondary: Colors.deepOrangeAccent,
+        ),
+      ),
+      home: const BistroFrame(
+        title: '小酒馆',
+      ),
       // 国际化
       // localizationsDelegates: [
       //   GlobalMaterialLocalizations.delegate,
@@ -42,7 +54,7 @@ class Bistro extends StatelessWidget {
 }
 
 class BistroFrame extends StatefulWidget {
-  const BistroFrame({Key? key,required this.title}) : super(key: key);
+  const BistroFrame({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -52,17 +64,17 @@ class BistroFrame extends StatefulWidget {
 
 class _BistroFrameState extends State<BistroFrame> {
   late Widget _body;
-  int _index = 0;
+  int _index = 1;
 
   void initData() {
     //页面初始化时要干的事
     _body = IndexedStack(
       children: <Widget>[
         const App(),
-        Life(),
+        const Life(),
         const App(),
         News(),
-        Mine(),
+        const Mine(),
       ],
       index: _index,
     );
@@ -86,7 +98,7 @@ class _BistroFrameState extends State<BistroFrame> {
             bottomAppBarItem(
               index: 1,
               icon: Icons.forum,
-              title: '讨论',
+              title: '听说',
             ),
             bottomAppBarItem(
               index: 2,
@@ -125,17 +137,22 @@ class _BistroFrameState extends State<BistroFrame> {
     bool isShow = true, // 是否需要显示
   }) {
     //设置默认未选中的状态
-    double size = 13;
+    double size = 11;
     Color color = Colors.black87;
 
-    if (_index == index) {
-      //选中的话
-      size = 15;
-      color = Theme.of(context).primaryColor;
-    }
     TextStyle style = TextStyle(
       fontSize: size,
     );
+
+    if (_index == index) {
+      //选中的话
+      size = 17;
+      color = Theme.of(context).primaryColor;
+      title = '';
+      style = const TextStyle(
+        fontSize: 0,
+      );
+    }
     Widget child;
     if (isShow) {
       child = GestureDetector(

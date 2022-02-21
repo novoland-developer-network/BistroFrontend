@@ -64,18 +64,17 @@ class BistroFrame extends StatefulWidget {
 
 class _BistroFrameState extends State<BistroFrame> {
   late Widget _body;
-  int _index = 3;
+  int _index = 0;
+
   static const List<Map<String, dynamic>> _iconList = [
     {
       "title": "应用",
-      "default": Icons.storefront_outlined,
-      "active": Icons.storefront_rounded,
+      "icon": Icons.storefront_outlined,
       "display": true,
     },
     {
       "title": "道听",
-      "default": Icons.forum_outlined,
-      "active": Icons.forum_rounded,
+      "icon": Icons.forum_outlined,
       "display": true,
     },
     {
@@ -83,14 +82,12 @@ class _BistroFrameState extends State<BistroFrame> {
     },
     {
       "title": "途说",
-      "default": Icons.supervisor_account_outlined,
-      "active": Icons.supervisor_account_sharp,
+      "icon": Icons.supervisor_account_outlined,
       "display": true,
     },
     {
       "title": "我的",
-      "default": Icons.perm_identity_outlined,
-      "active": Icons.person_sharp,
+      "icon": Icons.person_outline,
       "display": true,
     },
   ];
@@ -116,7 +113,6 @@ class _BistroFrameState extends State<BistroFrame> {
 
     List<Widget> bottomNavigationBarData = [];
     for (var i = 0; i < 5; i++) {
-
       Widget itemWidget = bottomAppBarItem(index: i);
       bottomNavigationBarData.add(itemWidget);
     }
@@ -148,7 +144,7 @@ class _BistroFrameState extends State<BistroFrame> {
     Map<String, dynamic> item = _iconList[index];
 
     //设置默认未选中的状态
-    double size = 11;
+    double size = 14;
     Color color = Colors.black87;
     bool isShow = item["display"];
 
@@ -156,43 +152,40 @@ class _BistroFrameState extends State<BistroFrame> {
       fontSize: size,
     );
 
-
     Widget child;
     if (!isShow) {
       child = Container();
     } else {
-      IconData icon = item["default"];
+      IconData? icon = item["default"];
       String title = item["title"];
 
       if (_index == index) {
         //选中的话
-        size = 14;
         color = Theme.of(context).primaryColor;
         style = const TextStyle(
           fontSize: 0,
         );
-        icon = item["active"];
+        icon = item["icon"];
       }
 
       child = GestureDetector(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              width: 25.0,
-              height: 23.0,
-              child: Icon(
-                icon,
-                color: color,
-                size: size * 1.7,
+        child: icon != null
+            ? SizedBox(
+                width: 25.0,
+                height: 23.0,
+                child: Icon(
+                  icon,
+                  color: color,
+                  size: size * 1.7,
+                ),
+              )
+            : Container(
+                alignment: Alignment.center,
+                child: Text(
+                  title,
+                  style: style,
+                ),
               ),
-            ),
-            Text(
-              title,
-              style: style,
-            )
-          ],
-        ),
         onTap: () {
           if (_index != index) {
             setState(() {

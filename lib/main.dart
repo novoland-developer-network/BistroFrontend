@@ -1,115 +1,179 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart';
+import 'app.dart';
+import 'life.dart';
+import 'news.dart';
+import 'mine.dart';
+import 'router/router.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+//import 'common/access_control_filter.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+void main() => runApp(const Bistro());
+
+class Bistro extends StatelessWidget {
+  const Bistro({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: '小酒馆',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+          fontFamily: "SongTiHeavy",
+          primaryColor: const Color(0xFFff857a),
+          primaryColorDark: Colors.black54,
+          backgroundColor: const Color(0xFFFFF7F8),
+          bottomAppBarColor: const Color(0xFFFFF7F8),
+          appBarTheme: const AppBarTheme(color: Colors.white), colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.amber).copyWith(secondary: Colors.deepOrangeAccent)),
+      home: const BistroFrame(title: 'Flutter Demo Home Page', ),
+      // 国际化
+      // localizationsDelegates: [
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      // ],
+      // supportedLocales: const [
+      //   Locale('zh', 'CN'),
+      // ],
+      // locale: const Locale('zh'),
+      // 路由
+      routes: router,
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+class BistroFrame extends StatefulWidget {
+  const BistroFrame({Key? key,required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _BistroFrameState createState() => _BistroFrameState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _BistroFrameState extends State<BistroFrame> {
+  late Widget _body;
+  int _index = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  void initData() {
+    //页面初始化时要干的事
+    _body = IndexedStack(
+      children: <Widget>[
+        const App(),
+        Life(),
+        const App(),
+        News(),
+        Mine(),
+      ],
+      index: _index,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    initData();
+
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: _body,
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        child: Row(
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            bottomAppBarItem(
+              index: 0,
+              icon: Icons.apps,
+              title: '应用',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            bottomAppBarItem(
+              index: 1,
+              icon: Icons.forum,
+              title: '讨论',
+            ),
+            bottomAppBarItem(
+              index: 2,
+              isShow: false,
+            ),
+            bottomAppBarItem(
+              index: 3,
+              icon: Icons.business,
+              title: '资讯',
+            ),
+            bottomAppBarItem(
+              index: 4,
+              icon: Icons.perm_identity,
+              title: '我的',
             ),
           ],
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        backgroundColor: Theme.of(context).backgroundColor,
+        onPressed: () => {},
+        child: Icon(
+          Icons.search,
+          color: Theme.of(context).primaryColor,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+
+  Widget bottomAppBarItem({
+    required int index, // 序列
+    IconData? icon, // 图标
+    String? title, // 标签
+    bool isShow = true, // 是否需要显示
+  }) {
+    //设置默认未选中的状态
+    double size = 13;
+    Color color = Colors.black87;
+
+    if (_index == index) {
+      //选中的话
+      size = 15;
+      color = Theme.of(context).primaryColor;
+    }
+    TextStyle style = TextStyle(
+      fontSize: size,
+    );
+    Widget child;
+    if (isShow) {
+      child = GestureDetector(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              width: 25.0,
+              height: 23.0,
+              child: Icon(
+                icon,
+                color: color,
+                size: size * 1.7,
+              ),
+            ),
+            Text(
+              title!,
+              style: style,
+            )
+          ],
+        ),
+        onTap: () {
+          if (_index != index) {
+            setState(() {
+              _index = index;
+            });
+          }
+        },
+      );
+    } else {
+      child = Container();
+    }
+
+    //构造返回的Widget
+    return SizedBox(
+      height: 49,
+      width: MediaQuery.of(context).size.width / 5,
+      child: child,
     );
   }
 }

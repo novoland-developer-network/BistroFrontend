@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+//import 'common/access_control_filter.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart'
+    if (dart.library.html) 'package:flutter_native_splash/flutter_native_splash_web.dart';
+
 // import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app.dart';
 import 'life.dart';
@@ -7,9 +11,11 @@ import 'mine.dart';
 import 'news.dart';
 import 'router/router.dart';
 
-//import 'common/access_control_filter.dart';
-
-void main() => runApp(const Bistro());
+void main() {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  runApp(const Bistro());
+}
 
 class Bistro extends StatelessWidget {
   const Bistro({Key? key}) : super(key: key);
@@ -64,7 +70,7 @@ class BistroFrame extends StatefulWidget {
 
 class _BistroFrameState extends State<BistroFrame> {
   late Widget _body;
-  int _index = 0;
+  int _index = 3;
 
   static const List<Map<String, dynamic>> _iconList = [
     {
@@ -92,9 +98,15 @@ class _BistroFrameState extends State<BistroFrame> {
     },
   ];
 
-  void initData() {
+  @override
+  initState() {
     //页面初始化时要干的事
+    super.initState();
 
+    initialization();
+  }
+
+  void initData() {
     _body = IndexedStack(
       children: <Widget>[
         const App(),
@@ -105,6 +117,20 @@ class _BistroFrameState extends State<BistroFrame> {
       ],
       index: _index,
     );
+  }
+
+  void initialization() async {
+    // This is where you can initialize the resources needed by your app while
+    // the splash screen is displayed.  Remove the following example because
+    // delaying the user experience is a bad design practice!
+    print('ready in 3...');
+    await Future.delayed(const Duration(seconds: 1));
+    print('ready in 2...');
+    await Future.delayed(const Duration(seconds: 1));
+    print('ready in 1...');
+    await Future.delayed(const Duration(seconds: 1));
+    print('go!');
+    FlutterNativeSplash.remove();
   }
 
   @override
